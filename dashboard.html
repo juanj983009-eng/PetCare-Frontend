@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare+ | Mis Mascotas</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos específicos para el Dashboard */
+        .dashboard-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+            /* AGREGA ESTO: Fuerza el color del texto a gris oscuro */
+            color: #333333;
+        }
+        /* Esto asegura que el fondo del dashboard sea gris claro y el texto visible */
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f2f5;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .btn-logout {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .pet-card {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <div class="header">
+            <h1 id="welcome-msg">Hola, Usuario 👋</h1>
+            <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+        </div>
+
+        <h2>Mis Mascotas</h2>
+        <div class="pet-grid">
+            <div class="pet-card">
+                <h3>🐶 Firulais</h3>
+                <p>Raza: Golden</p>
+                <button style="background:#3498db; color:white; border:none; padding:5px; border-radius:3px;">Ver
+                    Historial</button>
+            </div>
+            <div class="pet-card">
+                <h3>🐱 Michi</h3>
+                <p>Raza: Persa</p>
+                <button style="background:#3498db; color:white; border:none; padding:5px; border-radius:3px;">Ver
+                    Historial</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pequeño script para proteger la página
+        // Si no hay usuario guardado en el navegador, lo manda al login
+        const usuarioLogueado = localStorage.getItem('usuario_actual');
+
+        if (!usuarioLogueado) {
+            alert("⚠️ Debes iniciar sesión primero.");
+            window.location.href = 'index.html';
+        } else {
+            // Si sí hay usuario, ponemos su nombre en el título
+            document.getElementById('welcome-msg').innerText = "Hola, " + usuarioLogueado + " 👋";
+        }
+
+        function logout() {
+            localStorage.removeItem('usuario_actual');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>
