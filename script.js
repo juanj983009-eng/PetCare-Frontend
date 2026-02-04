@@ -42,4 +42,37 @@ botonIngresar.addEventListener('click', async function () {
         console.error("Error de conexión:", error);
         alert("No se pudo conectar con el servidor. ¿Está encendido?");
     }
+    // Referencia al nuevo botón
+    const botonRegistrar = document.getElementById('btn-registrar');
+
+    botonRegistrar.addEventListener('click', async function () {
+        const usuario = inputUsuario.value;
+        const password = inputPassword.value;
+
+        if (usuario === "" || password === "") {
+            alert("⚠️ Escribe un usuario y contraseña para registrarte.");
+            return;
+        }
+
+        try {
+            // Llamamos a la ruta DE REGISTRO
+            const respuesta = await fetch('http://127.0.0.1:5000/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario: usuario, password: password })
+            });
+
+            const datos = await respuesta.json();
+
+            if (datos.exito) {
+                alert("🎉 " + datos.mensaje + " ¡Ahora puedes iniciar sesión!");
+            } else {
+                alert("❌ " + datos.mensaje);
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Error al intentar registrarse.");
+        }
+    });
 });

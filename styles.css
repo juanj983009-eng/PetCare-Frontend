@@ -60,3 +60,17 @@ button:hover {
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
     /* Sombra suave y elegante */
 }
+
+/* Estilo específico para el botón verde */
+.btn-verde {
+    background-color: #27ae60;
+    /* Verde hoja */
+    margin-top: 10px;
+    /* Separación del botón de arriba */
+}
+
+/* El efecto HOVER (Cuando pasas el mouse) */
+.btn-verde:hover {
+    background-color: #1e8449 !important;
+    /* Un verde más oscuro e intenso */
+}

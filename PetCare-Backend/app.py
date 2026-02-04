@@ -1,46 +1,77 @@
+import sqlite3
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
-# Permitimos que cualquier origen (tu frontend) se conecte a este backend
-CORS(app) 
+CORS(app)
 
-# --- BASE DE DATOS SIMULADA (MOCK) ---
-# Como aún no conectamos SQL, usaremos esto para probar la lógica.
-USUARIOS_REGISTRADOS = {
-    "JuanPerez": "admin123",
-    "MariaSistemas": "utp2026"
-}
+# Función auxiliar para conectarse a la base de datos
+def get_db_connection():
+    conn = sqlite3.connect('petcare.db')
+    conn.row_factory = sqlite3.Row # Esto permite acceder a las columnas por nombre
+    return conn
 
 @app.route('/')
 def home():
-    return "¡Servidor PetCare Activo! 🚀"
+    return "¡Servidor PetCare con Base de Datos SQL Activo! 🗄️"
 
-# --- NUEVA RUTA: LOGIN ---
-# Acepta solo método POST (envío de datos)
 @app.route('/api/login', methods=['POST'])
 def login():
-    # 1. Recibimos los datos que envía el Frontend (JSON)
     datos = request.get_json()
     usuario_recibido = datos.get('usuario')
     password_recibido = datos.get('password')
 
-    # 2. Imprimimos en la consola de Python para ver qué llega (útil para ti)
-    print(f"Intento de login: {usuario_recibido} | Pass: {password_recibido}")
+    print(f"🔍 Buscando en SQL a: {usuario_recibido}")
 
-    # 3. Validamos la lógica (El IF del Backend)
-    # Verificamos si el usuario existe y si la contraseña coincide
-    if usuario_recibido in USUARIOS_REGISTRADOS and USUARIOS_REGISTRADOS[usuario_recibido] == password_recibido:
+    # 1. Conectamos a la DB
+    conn = get_db_connection()
+
+    # 2. Ejecutamos la consulta SQL (SELECT)
+    # El '?' es por seguridad (evita inyecciones SQL básicas)
+    usuario_en_db = conn.execute('SELECT * FROM usuarios WHERE username = ? AND password = ?', 
+                                 (usuario_recibido, password_recibido)).fetchone()
+
+    conn.close() # Siempre cerrar la conexión
+
+    # 3. Validamos si encontramos algo
+    if usuario_en_db:
         return jsonify({
             "exito": True,
-            "mensaje": f"¡Bienvenido al sistema, {usuario_recibido}!",
-            "rol": "Admin"
+            "mensaje": f"¡Bienvenido de nuevo, {usuario_en_db['username']}!",
+            "rol": usuario_en_db['rol']
         })
     else:
         return jsonify({
             "exito": False,
-            "mensaje": "Usuario o contraseña incorrectos."
-        }), 401 # 401 es el código de error para "No autorizado"
+            "mensaje": "Usuario o contraseña incorrectos en la Base de Datos."
+        }), 401
 
+# --- NUEVA RUTA: REGISTRO ---
+@app.route('/api/register', methods=['POST'])
+def register():
+    datos = request.get_json()
+    usuario_nuevo = datos.get('usuario')
+    password_nuevo = datos.get('password')
+    
+    # Validación simple
+    if not usuario_nuevo or not password_nuevo:
+        return jsonify({"exito": False, "mensaje": "Faltan datos"}), 400
+
+    conn = get_db_connection()
+    try:
+        # Intentamos insertar (SQL INSERT)
+        # Si el usuario ya existe, dará error porque definimos 'UNIQUE' en la base de datos
+        conn.execute('INSERT INTO usuarios (username, password, rol) VALUES (?, ?, ?)',
+                     (usuario_nuevo, password_nuevo, 'Cliente'))
+        conn.commit() # ¡Importante! Guardar cambios
+        mensaje = "Usuario creado exitosamente"
+        exito = True
+    except sqlite3.IntegrityError:
+        mensaje = "Error: El usuario ya existe."
+        exito = False
+    finally:
+        conn.close()
+
+    return jsonify({"exito": exito, "mensaje": mensaje})
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
