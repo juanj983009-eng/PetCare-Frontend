@@ -1,4 +1,4 @@
-# 🐾 PetCare+ | Módulo de Autenticación
+# PetCare+ | Módulo de Autenticación
 
 Este proyecto es el prototipo del módulo de **Login** para la plataforma **PetCare+**, una aplicación diseñada para la gestión y cuidado de mascotas.
 
