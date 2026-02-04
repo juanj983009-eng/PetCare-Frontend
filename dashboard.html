@@ -85,20 +85,56 @@
     </div>
 
     <script>
-        // Pequeño script para proteger la página
-        // Si no hay usuario guardado en el navegador, lo manda al login
+        // 1. Verificación de seguridad
         const usuarioLogueado = localStorage.getItem('usuario_actual');
+        const usuarioId = localStorage.getItem('usuario_id');
 
-        if (!usuarioLogueado) {
-            alert("⚠️ Debes iniciar sesión primero.");
+        if (!usuarioLogueado || !usuarioId) {
             window.location.href = 'index.html';
         } else {
-            // Si sí hay usuario, ponemos su nombre en el título
             document.getElementById('welcome-msg').innerText = "Hola, " + usuarioLogueado + " 👋";
+            cargarMascotas(); // <--- Llamamos a la función mágica
+        }
+
+        // 2. Función para cargar mascotas reales
+        async function cargarMascotas() {
+            try {
+                // Llamamos a TU backend en la nube
+                // NOTA: Asegúrate de que esta URL sea la tuya de Render
+                const respuesta = await fetch(`https://petcare-api-fv8x.onrender.com/api/mascotas/${usuarioId}`);
+                const mascotas = await respuesta.json();
+
+                const contenedor = document.querySelector('.pet-grid');
+                contenedor.innerHTML = ''; // Borramos las tarjetas de ejemplo (limpieza)
+
+                if (mascotas.length === 0) {
+                    contenedor.innerHTML = '<p>No tienes mascotas registradas aún.</p>';
+                    return;
+                }
+
+                // Creamos una tarjeta por cada mascota que vino de la DB
+                mascotas.forEach(mascota => {
+                    const tarjeta = `
+                            <div class="pet-card">
+                                <h3>🐾 ${mascota.nombre}</h3>
+                                <p><strong>Raza:</strong> ${mascota.raza}</p>
+                                <p><strong>Edad:</strong> ${mascota.edad} años</p>
+                                <button style="background:#3498db; color:white; border:none; padding:5px; border-radius:3px; margin-top:10px;">
+                                    Ver Historial
+                                </button>
+                            </div>
+                        `;
+                    contenedor.innerHTML += tarjeta;
+                });
+
+            } catch (error) {
+                console.error("Error cargando mascotas:", error);
+                alert("Hubo un error cargando tus datos.");
+            }
         }
 
         function logout() {
-            localStorage.removeItem('usuario_actual');
+            localStorage.clear(); // Borra todo
             window.location.href = 'index.html';
         }
     </script>

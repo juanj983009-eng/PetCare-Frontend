@@ -32,11 +32,10 @@ botonIngresar.addEventListener('click', async function () {
 
         // 4. Reaccionamos según lo que dijo Python
         if (datos.exito === true) {
-            // 1. Guardamos el nombre del usuario en la memoria del navegador
-            // Esto sirve para mostrar "Hola Juan" en la otra página
-            localStorage.setItem('usuario_actual', usuario);
+            // Guardamos ID y Nombre
+            localStorage.setItem('usuario_actual', datos.usuario);
+            localStorage.setItem('usuario_id', datos.id); // <--- NUEVO: Guardamos el ID
 
-            // 2. Redirigimos al Dashboard
             window.location.href = 'dashboard.html';
         } else {
             alert("Error: " + datos.mensaje);
