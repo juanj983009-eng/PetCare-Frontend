@@ -32,8 +32,12 @@ botonIngresar.addEventListener('click', async function () {
 
         // 4. Reaccionamos según lo que dijo Python
         if (datos.exito === true) {
-            alert("✅ " + datos.mensaje);
-            // Aquí podrías redirigir a otra página, ej: window.location.href = "/dashboard.html";
+            // 1. Guardamos el nombre del usuario en la memoria del navegador
+            // Esto sirve para mostrar "Hola Juan" en la otra página
+            localStorage.setItem('usuario_actual', usuario);
+
+            // 2. Redirigimos al Dashboard
+            window.location.href = 'dashboard.html';
         } else {
             alert("Error: " + datos.mensaje);
         }
