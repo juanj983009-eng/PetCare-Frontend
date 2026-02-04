@@ -1,0 +1,62 @@
+/* Esto afecta a toda la página */
+body {
+    background-color: #f4f7f6;
+    /* Un gris muy suave de fondo */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Tipografía moderna */
+    text-align: center;
+    /* Centramos todo */
+    margin-top: 50px;
+}
+
+/* Esto afecta solo al Título */
+h1 {
+    color: #2c3e50;
+    /* Azul oscuro */
+}
+
+/* Esto afecta a las cajas de texto */
+input {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    /* Bordes redondeados */
+    width: 200px;
+}
+
+/* Esto afecta al Botón */
+button {
+    background-color: #3498db;
+    /* Azul brillante */
+    color: white;
+    /* Letra blanca */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    /* Que aparezca la manito al pasar el mouse */
+    font-size: 16px;
+}
+
+/* Un truco: cuando pases el mouse por el botón, cambia de color */
+button:hover {
+    background-color: #2980b9;
+    /* Azul un poco más oscuro */
+}
+
+/* Estilos para nuestra tarjeta */
+.login-card {
+    background-color: white;
+    /* Fondo blanco para la tarjeta */
+    width: 350px;
+    /* Ancho fijo */
+    margin: 0 auto;
+    /* TRUCO: Esto centra la caja horizontalmente */
+    padding: 40px;
+    /* Espacio interior para que el texto no toque los bordes */
+    border-radius: 10px;
+    /* Bordes redondeados */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    /* Sombra suave y elegante */
+}
