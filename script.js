@@ -16,7 +16,7 @@ botonIngresar.addEventListener('click', async function () {
     try {
         // 2. Aquí ocurre la MAGIA: El Frontend "llama" al Backend
         // Usamos la dirección de tu servidor Python (localhost:5000)
-        const respuesta = await fetch('http://127.0.0.1:5000/api/login', {
+        const respuesta = await fetch('https://petcare-api-fv8x.onrender.com/api/login', {
             method: 'POST', // Método para enviar datos
             headers: {
                 'Content-Type': 'application/json' // Le decimos: "Te estoy enviando JSON"
@@ -56,7 +56,7 @@ botonIngresar.addEventListener('click', async function () {
 
         try {
             // Llamamos a la ruta DE REGISTRO
-            const respuesta = await fetch('http://127.0.0.1:5000/api/register', {
+            const respuesta = await fetch('https://petcare-api-fv8x.onrender.com/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ usuario: usuario, password: password })
